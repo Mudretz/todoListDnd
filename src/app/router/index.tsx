@@ -1,15 +1,10 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import { NotFoundPage } from "../components/NotFoundPage";
 import { AppLayout } from "../components/AppLayout";
-import { Todo } from "@src/pages/Todo";
+import { todoPageRouter } from "@src/pages/Todo";
 
 export const appRouter = () => {
-    const routes: RouteObject[] = [
-        {
-            path: "",
-            element: <Todo />,
-        },
-    ];
+    const routes: RouteObject[] = [...todoPageRouter()];
     return createBrowserRouter([
         {
             path: "/",

@@ -7,3 +7,10 @@ export const useGetTodoList = () => {
         queryFn: todoService.getTodoList,
     });
 };
+
+export const useGetCompleteTodoList = () => {
+    return useQuery({
+        queryKey: ["completeTodo"],
+        queryFn: todoService.getCompleteTodoList,
+    });
+};
