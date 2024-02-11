@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { uniqueId } from "lodash";
-import { Button } from "@mui/material";
 import {
     useCreateTodo,
     useGetCompleteTodoList,
@@ -12,12 +11,13 @@ import {
 } from "../../service";
 import { TodoList } from "../TodoList";
 import { TODO_DROPPABLE_ID } from "../../constants";
+import { FormCreateTodo } from "../FormCreateTodo";
 import styles from "./styles.module.scss";
 
 export const TodoLayout: FC = () => {
     const todoList = useGetTodoList();
-    const completeTodoList = useGetCompleteTodoList();
     const createTodoMutation = useCreateTodo();
+    const completeTodoList = useGetCompleteTodoList();
     const updateTodoListMutation = useUpdateTodoList();
     const updateBothListMutation = useUpdateBothList();
     const updateCompleteListMutation = useUpdateCompleteTodoList();
@@ -65,14 +65,7 @@ export const TodoLayout: FC = () => {
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div className={styles.container}>
-                <Button
-                    variant='contained'
-                    sx={{
-                        width: 150,
-                    }}
-                >
-                    Добавить
-                </Button>
+                <FormCreateTodo onCreateTodo={handleCreateTodo} />
                 <div className={styles.list}>
                     <TodoList
                         data={todoList.data}
