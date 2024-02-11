@@ -1,29 +1,30 @@
+import { uniqueId } from "lodash";
 import { HttpResponse, http } from "msw";
 
-// response resolver
 const mockData = [
     {
-      title:
-        "Что такое генераторы статических сайтов и почему Astro — лучший фреймворк для разработки лендингов",
-      url: "https://habr.com/ru/articles/779428/",
-      author: "@AlexGriss",
+        id: uniqueId(),
+        title: "Сделать тестовое задание",
     },
     {
-      title: "Как использовать html-элемент <dialog>?",
-      url: "https://habr.com/ru/articles/778542/",
-      author: "@AlexGriss",
+        id: uniqueId(),
+        title: "Получение приглашение на собеседование",
     },
-  ]
+];
 
-const postsResolver = () => {
-  return HttpResponse.json(mockData);
-};
+const todoHandler = http.get("/api/todo", () => {
+    return HttpResponse.json(mockData);
+});
 
-const postsHandler = http.get("/api/posts", postsResolver);
-const createPostHandler = http.post('/user', async ({ request }) => {
-    const newPost = await request.json();
+const createTodoHandler = http.post("/api/todo", async ({ request }) => {
+    const newTodo = await request.json();
+    mockData.push(
+        newTodo as {
+            id: string;
+            title: string;
+        },
+    );
+    return HttpResponse.json(newTodo, { status: 201 });
+});
 
-    return HttpResponse.json(newPost, { status: 201 })
-  })
-
-export const handlers = [postsHandler, createPostHandler];
+export const handlers = [todoHandler, createTodoHandler];
