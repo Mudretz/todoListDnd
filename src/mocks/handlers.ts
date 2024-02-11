@@ -5,7 +5,7 @@ import { HttpResponse, http } from "msw";
 let activeTodoList: Todo[] = [
     {
         id: uniqueId(),
-        title: "Получение приглашение на собеседование",
+        title: "Получить приглашение на собеседование",
     },
 ];
 

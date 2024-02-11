@@ -1,10 +1,11 @@
 import { FC } from "react";
+import { CircularProgress } from "@mui/material";
 import styles from "./styles.module.scss";
 
-export const NotFoundPage: FC = () => {
+export const Loader: FC = () => {
     return (
         <div className={styles.container}>
-            <p>Страница не найдена</p>
+            <CircularProgress />
         </div>
     );
 };

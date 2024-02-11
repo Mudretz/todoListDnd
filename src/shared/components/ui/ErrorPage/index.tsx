@@ -1,10 +1,10 @@
 import { FC } from "react";
 import styles from "./styles.module.scss";
 
-export const NotFoundPage: FC = () => {
+export const ErrorPage: FC = () => {
     return (
         <div className={styles.container}>
-            <p>Страница не найдена</p>
+            Произошла ошибка. Повторите позже
         </div>
     );
 };
