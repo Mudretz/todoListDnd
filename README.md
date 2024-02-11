@@ -1,5 +1,5 @@
 # Todo лист с Drag on Drop
-Стек техногологий: HTML, CSS, SCSS, SCSS modules, TypeScript, React, React Query(TanStack Query), MaterialUI, react-beautiful-dnd<br/>
+Стек техногологий: HTML, CSS, SCSS, SCSS modules, TypeScript, React, React Query(TanStack Query), MaterialUI, react-beautiful-dnd, axios, MSW<br/>
 
 ## Установка проекта:
 
