@@ -59,6 +59,7 @@ export const TodoLayout: FC = () => {
     };
 
     if (todoList.isPending || completeTodoList.isPending) return <Loader />;
+
     if (!todoList.isSuccess || !completeTodoList.isSuccess)
         return <ErrorPage />;
 

@@ -1,6 +1,6 @@
 import { Todo } from "@src/shared/types";
 import { uniqueId } from "lodash";
-import { HttpResponse, http } from "msw";
+import { HttpResponse, http, delay } from "msw";
 
 let activeTodoList: Todo[] = [
     {
@@ -16,11 +16,13 @@ let completeTodoList: Todo[] = [
     },
 ];
 
-const todoHandler = http.get("/api/todo/all", () => {
+const todoHandler = http.get("/api/todo/all", async () => {
+    await delay(500);
     return HttpResponse.json(activeTodoList);
 });
 
-const todoCompleteHandler = http.get("/api/completeTodo/all", () => {
+const todoCompleteHandler = http.get("/api/completeTodo/all", async () => {
+    await delay(500);
     return HttpResponse.json(completeTodoList);
 });
 
