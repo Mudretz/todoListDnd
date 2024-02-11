@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { todoService } from "./todo.service";
 import { Todo } from "@src/shared/types";
 
-export const useCreateTodo = () => {
+export const useCreateTodoMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: Todo) => todoService.createTodo(data),
@@ -12,7 +12,7 @@ export const useCreateTodo = () => {
     });
 };
 
-export const useUpdateTodoList = () => {
+export const useUpdateTodoListMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: Todo[]) => todoService.updateTodoList(data),
@@ -22,7 +22,7 @@ export const useUpdateTodoList = () => {
     });
 };
 
-export const useUpdateCompleteTodoList = () => {
+export const useUpdateCompleteTodoListMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: Todo[]) => todoService.updateCompleteTodoList(data),
@@ -32,13 +32,34 @@ export const useUpdateCompleteTodoList = () => {
     });
 };
 
-export const useUpdateBothList = () => {
+export const useUpdateBothListMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: Record<string, Todo[]>) =>
             todoService.updateBothList(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["todo"] });
+            queryClient.invalidateQueries({ queryKey: ["completeTodo"] });
+        },
+    });
+};
+
+export const useDeleteTodoMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: { id: string }) => todoService.deleteTodo(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["todo"] });
+        },
+    });
+};
+
+export const useDeleteCompleteTodoMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: { id: string }) =>
+            todoService.deleteCompleteTodo(data),
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["completeTodo"] });
         },
     });

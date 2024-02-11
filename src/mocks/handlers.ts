@@ -81,6 +81,37 @@ const updateBothListTodoHandler = http.put(
     },
 );
 
+const deleteTodoHandlers = http.delete(
+    "/api/todo/delete/:todoId",
+    async ({ params }) => {
+        const { todoId } = params;
+        activeTodoList = activeTodoList.filter((item) => item.id !== todoId);
+        return HttpResponse.json(
+            {
+                message: "ok",
+            },
+            { status: 200 },
+        );
+    },
+);
+
+const deleteCompleteTodoHandlers = http.delete(
+    "/api/completeTodo/delete/:todoId",
+    async ({ params }) => {
+        const { todoId } = params;
+        console.log(todoId);
+        completeTodoList = completeTodoList.filter(
+            (item) => item.id !== todoId,
+        );
+        return HttpResponse.json(
+            {
+                message: "ok",
+            },
+            { status: 200 },
+        );
+    },
+);
+
 export const handlers = [
     todoHandler,
     todoCompleteHandler,
@@ -88,4 +119,6 @@ export const handlers = [
     updateTodoListHandler,
     updateCompleteTodoListHandler,
     updateBothListTodoHandler,
+    deleteTodoHandlers,
+    deleteCompleteTodoHandlers,
 ];

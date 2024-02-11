@@ -1,16 +1,19 @@
 import { FC } from "react";
-import { Card, Paper } from "@mui/material";
+import { Button, Card, Paper } from "@mui/material";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { DroppableData } from "@src/shared/types";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface DroppableListProps {
     droppableId: string;
     data: DroppableData[];
+    onClick: (id: string, droppableId: string) => void;
 }
 
 export const DroppableList: FC<DroppableListProps> = ({
     droppableId,
     data,
+    onClick,
 }) => {
     return (
         <Droppable droppableId={droppableId}>
@@ -41,9 +44,27 @@ export const DroppableList: FC<DroppableListProps> = ({
                                     key={item.id}
                                     sx={{
                                         p: 1,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
                                     }}
                                 >
-                                    {item.title}
+                                    <div>{item.title}</div>
+                                    <Button
+                                        sx={{
+                                            p: 0,
+                                            minWidth: 30,
+                                        }}
+                                        onClick={() =>
+                                            onClick(item.id, droppableId)
+                                        }
+                                    >
+                                        <DeleteIcon
+                                            sx={{
+                                                cursor: "pointer",
+                                            }}
+                                        />
+                                    </Button>
                                 </Card>
                             )}
                         </Draggable>

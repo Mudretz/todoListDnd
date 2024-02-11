@@ -25,4 +25,10 @@ export const todoService = {
     ): Promise<void> => {
         await axiosInstance.put("/todoAll/update", data);
     },
+    deleteTodo: async (data: { id: string }): Promise<void> => {
+        await axiosInstance.delete(`/todo/delete/${data.id}`);
+    },
+    deleteCompleteTodo: async (data: { id: string }): Promise<void> => {
+        await axiosInstance.delete(`/completeTodo/delete/${data.id}`);
+    },
 };

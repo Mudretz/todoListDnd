@@ -2,12 +2,14 @@ import { FC } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { uniqueId } from "lodash";
 import {
-    useCreateTodo,
+    useCreateTodoMutation,
+    useDeleteCompleteTodoMutation,
+    useDeleteTodoMutation,
     useGetCompleteTodoList,
     useGetTodoList,
-    useUpdateBothList,
-    useUpdateCompleteTodoList,
-    useUpdateTodoList,
+    useUpdateBothListMutation,
+    useUpdateCompleteTodoListMutation,
+    useUpdateTodoListMutation,
 } from "../../service";
 import { TodoList } from "../TodoList";
 import { TODO_DROPPABLE_ID } from "../../constants";
@@ -16,20 +18,34 @@ import styles from "./styles.module.scss";
 
 export const TodoLayout: FC = () => {
     const todoList = useGetTodoList();
-    const createTodoMutation = useCreateTodo();
+    const createTodo = useCreateTodoMutation();
     const completeTodoList = useGetCompleteTodoList();
-    const updateTodoListMutation = useUpdateTodoList();
-    const updateBothListMutation = useUpdateBothList();
-    const updateCompleteListMutation = useUpdateCompleteTodoList();
+    const updateTodoList = useUpdateTodoListMutation();
+    const updateBothList = useUpdateBothListMutation();
+    const updateCompleteList = useUpdateCompleteTodoListMutation();
+    const deleteTodo = useDeleteTodoMutation();
+    const deleteCompleteTodo = useDeleteCompleteTodoMutation();
 
     const handleCreateTodo = (todo: string) => {
-        createTodoMutation.mutate({
+        createTodo.mutate({
             id: uniqueId(),
             title: todo,
         });
     };
 
-    if (!todoList.isSuccess || !completeTodoList.isSuccess) return null;
+    const handleDeleteTodo = (id: string, type: string) => {
+        switch (type) {
+            case "list":
+                deleteTodo.mutate({ id: id });
+                break;
+            case "completeList":
+                deleteCompleteTodo.mutate({ id: id });
+                break;
+        }
+    };
+
+    if (!todoList.isSuccess || !completeTodoList.isSuccess)
+        return <div>Загрузка</div>;
 
     const onDragEnd = (result: DropResult) => {
         const { destination, source } = result;
@@ -51,11 +67,11 @@ export const TodoLayout: FC = () => {
         if (source.droppableId === destination.droppableId) {
             start.splice(destination.index, 0, removed);
             return source.droppableId === "list"
-                ? updateTodoListMutation.mutate(start)
-                : updateCompleteListMutation.mutate(start);
+                ? updateTodoList.mutate(start)
+                : updateCompleteList.mutate(start);
         }
         finish.splice(destination.index, 0, removed);
-        return updateBothListMutation.mutate({
+        return updateBothList.mutate({
             list: source.droppableId === "list" ? start : finish,
             completeList:
                 destination.droppableId === "completeList" ? finish : start,
@@ -71,11 +87,13 @@ export const TodoLayout: FC = () => {
                         data={todoList.data}
                         title='Список дел'
                         droppableId={TODO_DROPPABLE_ID.list}
+                        onDelete={handleDeleteTodo}
                     />
                     <TodoList
                         data={completeTodoList.data}
                         title='Список завершенных дел'
                         droppableId={TODO_DROPPABLE_ID.completeList}
+                        onDelete={handleDeleteTodo}
                     />
                 </div>
             </div>
