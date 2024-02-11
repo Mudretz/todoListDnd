@@ -1,10 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./app/components/App";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+async function enableMocking() {
+    const { worker } = await import("./mocks/browser");
+    return worker.start();
+}
+
+const rootElement = ReactDOM.createRoot(document.getElementById("root")!);
+
+enableMocking().then(() => {
+    rootElement.render(<App />);
+});
