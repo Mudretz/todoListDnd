@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button, Card, Container, Paper } from "@mui/material";
-import { useCreateTodo, useGetTodoList } from "./service";
+import { useCreateTodo, useGetTodoList, useUpdateTodoList } from "./service";
 import {
     DragDropContext,
     Draggable,
@@ -11,6 +11,7 @@ import {
 export const Todo: FC = () => {
     const { data, isFetching, isSuccess } = useGetTodoList();
     const createTodoMutation = useCreateTodo();
+    const updateTodoList = useUpdateTodoList();
 
     const handleCreateTodo = () => {
         createTodoMutation.mutate({
@@ -24,7 +25,22 @@ export const Todo: FC = () => {
     if (!isSuccess) return null;
 
     const onDragEnd = (result: DropResult) => {
-        console.log(result);
+        const { destination, source } = result;
+        if (!destination) return;
+        if (
+            source.droppableId === destination.droppableId &&
+            source.index === destination.index
+        )
+            return;
+        const start = [...data];
+        const finish = [];
+
+        if (source.droppableId === destination.droppableId) {
+            const starState = [...start];
+            const [removed] = starState.splice(source.index, 1);
+            starState.splice(destination.index, 0, removed);
+            return updateTodoList.mutate(starState);
+        }
     };
 
     return (

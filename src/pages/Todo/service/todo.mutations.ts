@@ -12,3 +12,14 @@ export const useCreateTodo = () => {
         },
     });
 };
+
+export const useUpdateTodoList = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: Todo[]) => todoService.updateTodoList(data),
+        mutationKey: ["todo"],
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["todo"] });
+        },
+    });
+};
