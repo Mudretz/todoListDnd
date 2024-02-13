@@ -13,6 +13,16 @@ export const todoService = {
     updateTodoList: async (data: Todo[]): Promise<void> => {
         await axiosInstance.put("/todo/update", data);
     },
+    updateTodo: async (data: Todo): Promise<void> => {
+        await axiosInstance.put(`/todo/update/${data.id}`, {
+            title: data.title,
+        });
+    },
+    updateCompleteTodo: async (data: Todo): Promise<void> => {
+        await axiosInstance.put(`/completeTodo/update/${data.id}`, {
+            title: data.title,
+        });
+    },
     getCompleteTodoList: async (): Promise<Todo[]> => {
         const response = await axiosInstance.get("/completeTodo/all");
         return response.data;

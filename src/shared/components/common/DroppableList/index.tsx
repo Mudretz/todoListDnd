@@ -1,19 +1,14 @@
-import { FC } from "react";
-import { Button, Card, Paper } from "@mui/material";
-import { Draggable, Droppable } from "react-beautiful-dnd";
-import { DroppableData } from "@src/shared/types";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { FC, PropsWithChildren } from "react";
+import { Paper } from "@mui/material";
+import { Droppable } from "react-beautiful-dnd";
 
-interface DroppableListProps {
+interface DroppableListProps extends PropsWithChildren {
     droppableId: string;
-    data: DroppableData[];
-    onClick: (id: string, droppableId: string) => void;
 }
 
 export const DroppableList: FC<DroppableListProps> = ({
     droppableId,
-    data,
-    onClick,
+    children,
 }) => {
     return (
         <Droppable droppableId={droppableId}>
@@ -30,45 +25,7 @@ export const DroppableList: FC<DroppableListProps> = ({
                     {...provider.droppableProps}
                     ref={provider.innerRef}
                 >
-                    {data.map((item, index) => (
-                        <Draggable
-                            key={item.id}
-                            draggableId={item.id}
-                            index={index}
-                        >
-                            {(provider) => (
-                                <Card
-                                    ref={provider.innerRef}
-                                    {...provider.dragHandleProps}
-                                    {...provider.draggableProps}
-                                    key={item.id}
-                                    sx={{
-                                        p: 1,
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                    }}
-                                >
-                                    <div>{item.title}</div>
-                                    <Button
-                                        sx={{
-                                            p: 0,
-                                            minWidth: 30,
-                                        }}
-                                        onClick={() =>
-                                            onClick(item.id, droppableId)
-                                        }
-                                    >
-                                        <DeleteIcon
-                                            sx={{
-                                                cursor: "pointer",
-                                            }}
-                                        />
-                                    </Button>
-                                </Card>
-                            )}
-                        </Draggable>
-                    ))}
+                    {children}
                     {provider.placeholder}
                 </Paper>
             )}

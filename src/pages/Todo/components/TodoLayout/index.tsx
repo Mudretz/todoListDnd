@@ -1,8 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import { uniqueId } from "lodash";
 import {
-    useCreateTodoMutation,
     useDeleteCompleteTodoMutation,
     useDeleteTodoMutation,
     useGetCompleteTodoList,
@@ -21,7 +19,6 @@ import styles from "./styles.module.scss";
 export const TodoLayout: FC = () => {
     const todoList = useGetTodoList();
     const completeTodoList = useGetCompleteTodoList();
-    const createTodo = useCreateTodoMutation();
     const updateTodoList = useUpdateTodoListMutation();
     const updateBothList = useUpdateBothListMutation();
     const updateCompleteList = useUpdateCompleteTodoListMutation();
@@ -39,13 +36,6 @@ export const TodoLayout: FC = () => {
             });
         }
     }, [todoList.isFetching, completeTodoList.isFetching]);
-
-    const handleCreateTodo = (todo: string) => {
-        createTodo.mutate({
-            id: uniqueId(),
-            title: todo,
-        });
-    };
 
     const handleDeleteTodo = (id: string, type: string) => {
         switch (type) {
@@ -101,7 +91,7 @@ export const TodoLayout: FC = () => {
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div className={styles.container}>
-                <FormCreateTodo onCreateTodo={handleCreateTodo} />
+                <FormCreateTodo />
                 <div className={styles.list}>
                     <TodoList
                         data={stateTodo.list}

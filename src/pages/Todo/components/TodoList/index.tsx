@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { DroppableList } from "@src/shared/components/common";
 import { Todo } from "@src/shared/types";
 import { TodoDroppableId } from "../../types";
+import { DraggableListTodo } from "../DraggableListTodo";
 import styles from "./styles.module.scss";
 
 interface TodoListProps {
@@ -20,10 +20,10 @@ export const TodoList: FC<TodoListProps> = ({
     return (
         <div className={styles.container}>
             {title && <h2>{title}</h2>}
-            <DroppableList
+            <DraggableListTodo
                 droppableId={droppableId}
                 data={data}
-                onClick={onDelete}
+                onDelete={onDelete}
             />
         </div>
     );

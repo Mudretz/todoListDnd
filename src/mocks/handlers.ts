@@ -101,10 +101,57 @@ const deleteCompleteTodoHandlers = http.delete(
     "/api/completeTodo/delete/:todoId",
     async ({ params }) => {
         const { todoId } = params;
-        console.log(todoId);
         completeTodoList = completeTodoList.filter(
             (item) => item.id !== todoId,
         );
+        return HttpResponse.json(
+            {
+                message: "ok",
+            },
+            { status: 200 },
+        );
+    },
+);
+
+const updateTodoHandler = http.put(
+    "/api/todo/update/:todoId",
+    async ({ request, params }) => {
+        const body = (await request.json()) as {
+            title: string;
+        };
+        const { todoId } = params;
+        activeTodoList.forEach((item, index) => {
+            if (item.id === todoId) {
+                activeTodoList[index] = {
+                    ...activeTodoList[index],
+                    title: body.title,
+                };
+            }
+        });
+        return HttpResponse.json(
+            {
+                message: "ok",
+            },
+            { status: 200 },
+        );
+    },
+);
+
+const updateCompleteTodoHandler = http.put(
+    "/api/completeTodo/update/:todoId",
+    async ({ request, params }) => {
+        const body = (await request.json()) as {
+            title: string;
+        };
+        const { todoId } = params;
+        completeTodoList.forEach((item, index) => {
+            if (item.id === todoId) {
+                completeTodoList[index] = {
+                    ...completeTodoList[index],
+                    title: body.title,
+                };
+            }
+        });
         return HttpResponse.json(
             {
                 message: "ok",
@@ -123,4 +170,6 @@ export const handlers = [
     updateBothListTodoHandler,
     deleteTodoHandlers,
     deleteCompleteTodoHandlers,
+    updateTodoHandler,
+    updateCompleteTodoHandler,
 ];

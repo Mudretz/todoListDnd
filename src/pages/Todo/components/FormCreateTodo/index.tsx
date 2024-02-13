@@ -1,26 +1,41 @@
 import { FC, useState } from "react";
 import { Button, Input } from "@mui/material";
+import { uniqueId } from "lodash";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Todo } from "@src/shared/types";
+import { todoService } from "../../service/todo.service";
+import { isValidString } from "@src/shared/utils";
+import { TEXT_MESSAGES } from "@src/shared/constants";
 import styles from "./styles.module.scss";
 
-interface FormCreateTodoProps {
-    onCreateTodo: (title: string) => void;
-}
-
-export const FormCreateTodo: FC<FormCreateTodoProps> = ({ onCreateTodo }) => {
+export const FormCreateTodo: FC = () => {
     const [text, setText] = useState("");
     const [error, setError] = useState("");
+    const queryClient = useQueryClient();
+
+    const { mutate } = useMutation({
+        mutationFn: (data: Todo) => todoService.createTodo(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["todo"] });
+            setText("");
+        },
+        onError: () => {
+            setError(TEXT_MESSAGES.errorNetwork);
+        },
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (error) setError("");
         setText(e.currentTarget.value);
     };
-
-    const handleClick = () => {
-        if (text.trim() === "") {
-            return setError("Заполните поле");
+    const handleCreateTodo = () => {
+        if (!isValidString(text)) {
+            return setError(TEXT_MESSAGES.textRequired);
         }
-        onCreateTodo(text);
-        setText("");
+        mutate({
+            id: uniqueId(),
+            title: text,
+        });
     };
 
     return (
@@ -47,7 +62,7 @@ export const FormCreateTodo: FC<FormCreateTodoProps> = ({ onCreateTodo }) => {
                 sx={{
                     width: 150,
                 }}
-                onClick={handleClick}
+                onClick={handleCreateTodo}
             >
                 Добавить
             </Button>
