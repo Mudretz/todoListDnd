@@ -52,14 +52,17 @@ export const FormEditTodo: FC<FormEditTodoProps> = ({
 
     const onSubmit = () => {
         if (!isValidString(value)) {
-            return setError("Заполните поле");
+            setError("Заполните поле");
+            return;
         }
         if (value !== item.title) {
             mutate({
                 id: item.id,
                 title: value,
             });
+            return;
         }
+        onHide();
     };
 
     return (
